@@ -1,16 +1,23 @@
 {
-  "name": "rest-sync-client-next-js-page-router",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "react": "^18",
-    "react-dom": "^18",
-    "next": "14.2.3"
-  }
+	"name": "rest-sync-client-next-js-page-router",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "dotenv -e .env.local -- next dev",
+		"build": "next build",
+		"start": "dotenv -e .env.local -- next start",
+		"lint": "next lint"
+	},
+	"dependencies": {
+		"bootstrap": "^5.3.3",
+		"cross-env": "^7.0.3",
+		"dotenv-cli": "^7.4.2",
+		"next": "14.2.3",
+		"react": "^18",
+		"react-bootstrap": "^2.10.2",
+		"react-dom": "^18"
+	},
+	"devDependencies": {
+		"dotenv": "^16.4.5"
+	}
 }
