@@ -44,7 +44,6 @@ export default function FindPerson({ blankFormData, formFieldsNames }) {
 		if (pageReset) {
 			setCurrentPage(1)
 		}
-		console.log(formData)
 		const filteredFormData = Object.fromEntries(
 			Object.entries(formData).filter(([_, value]) => value)
 		)
@@ -53,14 +52,10 @@ export default function FindPerson({ blankFormData, formFieldsNames }) {
 			_page: currentPage,
 			_limit: perPage
 		})
-
 		try {
 			const response = await fetch(`${process.env.API_URL}/person?${params}`, {
 				method: 'GET',
-				headers: {
-					'Uxp-Client': `${process.env.HEADER_UXP_CLIENT}`,
-					'Uxp-Service': `${process.env.HEADER_UXP_CLIENT}`
-				}
+				headers: {}
 			})
 			if (response.ok) {
 				const data = await response.json()

@@ -1,16 +1,14 @@
 /** @type {import('next').NextConfig} */
 // next.config.mjs
-import { config as dotenvConfig } from 'dotenv';
-dotenvConfig();
-
+// console.log(process.env)
 const nextConfig = {
-  reactStrictMode: true,
-  env: {
-    API_URL: process.env.API_URL,
-    HEADER_UXP_CLIENT:process.env.HEADER_UXP_CLIENT,
-    HEADER_UXP_SERVICE:process.env.HEADER_UXP_SERVICE
-    // Other server-side variables
-},
-};
+	reactStrictMode: true,
+	env: {
+		API_URL: process.env.API_URL,
+    SERVICE_URL:process.env.SERVICE_URL,
+		HEADERS: process.env.HEADERS
+		// Other server-side variables
+	}
+}
 
-export default nextConfig;
+export default nextConfig

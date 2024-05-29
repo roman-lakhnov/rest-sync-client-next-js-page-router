@@ -5,6 +5,7 @@ import NavBar from '../components/NavBar'
 import { Container, Form, Button } from 'react-bootstrap'
 import FormComponent from '../components/Form'
 
+
 export default function AddPerson({ blankFormData, formFieldsNames }) {
 	const router = useRouter()
 	const [formData, setFormData] = useState({ ...blankFormData })
@@ -36,9 +37,7 @@ export default function AddPerson({ blankFormData, formFieldsNames }) {
 			const response = await fetch(`${process.env.API_URL}/person`, {
 				method: 'POST',
 				headers: {
-					'Content-Type': 'application/json',
-          'Uxp-Client':`${process.env.HEADER_UXP_CLIENT}`,
-          'Uxp-Service':`${process.env.HEADER_UXP_CLIENT}`
+					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify(formData)
 			})

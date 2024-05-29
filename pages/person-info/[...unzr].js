@@ -37,8 +37,6 @@ const PersonInfo = ({ blankFormData, formFieldsNames }) => {
 					{
 						method: 'GET',
 						headers: {
-							'Uxp-Client': `${process.env.HEADER_UXP_CLIENT}`,
-							'Uxp-Service': `${process.env.HEADER_UXP_CLIENT}`
 						}
 					}
 				)
@@ -76,9 +74,7 @@ const PersonInfo = ({ blankFormData, formFieldsNames }) => {
 				{
 					method: 'PUT',
 					headers: {
-						'Content-Type': 'application/json',
-						'Uxp-Client': `${process.env.HEADER_UXP_CLIENT}`,
-						'Uxp-Service': `${process.env.HEADER_UXP_CLIENT}`
+						'Content-Type': 'application/json'
 					},
 					body: JSON.stringify(formData)
 				}
@@ -102,17 +98,14 @@ const PersonInfo = ({ blankFormData, formFieldsNames }) => {
 				`${process.env.API_URL}/person/unzr/${unzr}`,
 				{
 					method: 'DELETE',
-					headers: {
-						'Uxp-Client': `${process.env.HEADER_UXP_CLIENT}`,
-						'Uxp-Service': `${process.env.HEADER_UXP_CLIENT}`
-					}
+					headers: {}
 				}
 			)
 
 			if (response.ok) {
 				alert('Запис було видалено. Профіль особи відсутній.')
 				setFormData({ ...blankFormData })
-        router.push(`/find-person`)
+				router.push(`/find-person`)
 			} else {
 				console.error('Failed to delete person:', response.statusText)
 			}
