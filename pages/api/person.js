@@ -1,6 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { getHeaders } from '@/utils/getHeaders'
-import { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function handler(req, res) {
 	const { method, body, query } = req

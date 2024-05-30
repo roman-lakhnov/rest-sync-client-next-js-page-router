@@ -1,6 +1,6 @@
 // pages/person/[...id].js
 
-import FormComponent from '@/components/Form'
+import FormComponent from '@/components/FormComponent'
 import NavBar from '@/components/NavBar'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -36,8 +36,7 @@ const PersonInfo = ({ blankFormData, formFieldsNames }) => {
 					`${process.env.API_URL}/person/unzr/${unzr}`,
 					{
 						method: 'GET',
-						headers: {
-						}
+						headers: {}
 					}
 				)
 				if (response.ok) {

@@ -3,19 +3,20 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"dev": "cross-env dotenv -e .env -- next dev -H 10.0.20.10",
-		"start": "cross-env dotenv -e .env -- next start",
+		"dev": "cross-env dotenv -e .env.local -- next dev -H 10.0.20.10",
+		"start": "cross-env dotenv -e .env.local -- next start -H 10.0.20.10",
 		"build": "next build",
 		"lint": "next lint"
 	},
 	"dependencies": {
-		"dotenv": "^16.4.5",
 		"bootstrap": "^5.3.3",
 		"cross-env": "^7.0.3",
+		"dotenv": "^16.4.5",
 		"dotenv-cli": "^7.4.2",
 		"next": "14.2.3",
 		"react": "^18",
 		"react-bootstrap": "^2.10.2",
-		"react-dom": "^18"
+		"react-dom": "^18",
+		"uuid": "^9.0.1"
 	}
 }

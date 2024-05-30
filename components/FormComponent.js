@@ -4,9 +4,7 @@ const FormComponent = ({
 	formData,
 	formFieldsNames,
 	isDataRequired,
-	submitButtonText,
 	handleSubmit,
-	handleClear,
 	handleChange,
   isFieldsDisabled
 }) => {

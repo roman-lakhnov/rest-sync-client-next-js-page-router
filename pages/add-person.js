@@ -3,8 +3,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import NavBar from '../components/NavBar'
 import { Container, Form, Button } from 'react-bootstrap'
-import FormComponent from '../components/Form'
-
+import FormComponent from '../components/FormComponent'
 
 export default function AddPerson({ blankFormData, formFieldsNames }) {
 	const router = useRouter()
@@ -20,15 +19,15 @@ export default function AddPerson({ blankFormData, formFieldsNames }) {
 		passportNumber: true,
 		sex: true
 	})
-  
+
 	const handleChange = e => {
-    const { name, value } = e.target
+		const { name, value } = e.target
 		setFormData({ ...formData, [name]: value })
 	}
-  
-  const handleClear = () => {
-    setFormData({ ...blankFormData })
-  }
+
+	const handleClear = () => {
+		setFormData({ ...blankFormData })
+	}
 
 	const handleSubmit = async e => {
 		e.preventDefault()
@@ -45,11 +44,13 @@ export default function AddPerson({ blankFormData, formFieldsNames }) {
 				alert('Запис доданий до електронного реєстру. Профіль особи створено. ')
 				router.push(`/person-info/${formData.unzr}`)
 			} else {
-				alert('Error adding person')
+				const data = await response.json()
+				const textMessage = JSON.stringify(data)
+				alert(`Помилка. Особу не вдалося додати до реєстру ${textMessage}`)
 			}
 		} catch (error) {
 			console.error('Error:', error)
-			alert('Error adding person')
+			alert(`Помилка. Особу не вдалося додати до реєстру  ${error}`)
 		}
 	}
 
@@ -70,20 +71,16 @@ export default function AddPerson({ blankFormData, formFieldsNames }) {
 						handleSubmit={handleSubmit}
 						handleChange={handleChange}
 					/>
+					<Button variant='secondary' onClick={handleClear} className='mt-3'>
+						Очистити форму
+					</Button>
 					<Button
 						variant='success'
 						type='submit'
 						form='personForm'
-						className='mt-3'
-					>
-						Надіслати форму і створити особу
-					</Button>
-					<Button
-						variant='secondary'
-						onClick={handleClear}
 						className='mt-3 ms-3'
 					>
-						Очистити форму
+						Надіслати форму і створити особу
 					</Button>
 				</div>
 			</Container>

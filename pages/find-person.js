@@ -1,4 +1,4 @@
-import FormComponent from '@/components/Form'
+import FormComponent from '@/components/FormComponent'
 import NavBar from '@/components/NavBar'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
