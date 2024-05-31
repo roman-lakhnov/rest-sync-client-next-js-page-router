@@ -22,7 +22,7 @@ const FormComponent = ({
 							required={isDataRequired[fieldName]}
               disabled={isFieldsDisabled}
 						/>
-					) : fieldName === 'sex' ? (
+					) : fieldName === 'gender' ? (
 						<Form.Control
 							as='select'
 							name={fieldName}

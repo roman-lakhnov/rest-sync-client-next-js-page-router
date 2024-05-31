@@ -17,11 +17,11 @@ export default function FindPerson({ blankFormData, formFieldsNames }) {
 		name: false,
 		surname: false,
 		patronym: false,
-		dateofbirth: false,
+		dateOfBirth: false,
 		rnokpp: false,
 		unzr: false,
 		passportNumber: false,
-		sex: false
+		gender: false
 	})
 	// Fetch data when currentPage or perPage changes
 	useEffect(() => {

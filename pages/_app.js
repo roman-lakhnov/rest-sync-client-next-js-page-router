@@ -7,8 +7,8 @@ const MyApp = ({ Component, pageProps }) => {
 		name: '',
 		surname: '',
 		patronym: '',
-		dateofbirth: '',
-		sex: '',
+		dateOfBirth: '',
+		gender: '',
 		unzr: '',
 		rnokpp: '',
 		passportNumber: ''
@@ -18,8 +18,8 @@ const MyApp = ({ Component, pageProps }) => {
 		name: "Ім'я",
 		surname: 'Прізвище',
 		patronym: 'По батькові',
-		dateofbirth: 'Дата народження',
-		sex: 'Стать',
+		dateOfBirth: 'Дата народження',
+		gender: 'Стать',
 		unzr: 'УНЗР',
 		rnokpp: 'РНОКПП',
 		passportNumber: 'Номер паспорту'

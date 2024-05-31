@@ -17,11 +17,11 @@ const PersonInfo = ({ blankFormData, formFieldsNames }) => {
 		name: true,
 		surname: true,
 		patronym: false,
-		dateofbirth: true,
+		dateOfBirth: true,
 		rnokpp: true,
 		unzr: true,
 		passportNumber: true,
-		sex: true
+		gender: true
 	})
 
 	useEffect(() => {
