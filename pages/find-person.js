@@ -1,10 +1,15 @@
+// pages/find-person.js
+
+// Імпортуємо необхідні бібліотеки та компоненти
 import FormComponent from '@/components/FormComponent'
 import NavBar from '@/components/NavBar'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Button, Container, Form, Pagination, Table } from 'react-bootstrap'
 
+// Сторінка для пошуку особи в реєстрі
 export default function FindPerson({ blankFormData, formFieldsNames }) {
+	// Ініціалізуємо роутер та стани для форми та результатів пошуку
 	const router = useRouter()
 	const [isFieldsDisabled, setIsFieldsDisabled] = useState(false)
 	const [formData, setFormData] = useState({ ...blankFormData })
@@ -23,20 +28,20 @@ export default function FindPerson({ blankFormData, formFieldsNames }) {
 		passportNumber: false,
 		gender: false
 	})
-	// Fetch data when currentPage or perPage changes
+	// Функція для виконання запиту на сервер при зміні сторінки або кількості записів на сторінці
 	useEffect(() => {
 		handleFetch()
 	}, [currentPage, perPage])
-
+	// Функція для обробки зміни значення поля форми
 	const handleChange = e => {
 		const { name, value } = e.target
 		setFormData({ ...formData, [name]: value })
 	}
-
+	// Функція для очищення форми
 	const handleClear = () => {
 		setFormData({ ...blankFormData })
 	}
-
+	// Функція для виконання запиту на сервер
 	const handleFetch = async (pageReset = false, e) => {
 		if (e) {
 			e.preventDefault()
@@ -60,7 +65,7 @@ export default function FindPerson({ blankFormData, formFieldsNames }) {
 			if (response.ok) {
 				const data = await response.json()
 				setResults(data)
-				// Set total pages based on total number of records
+				// Встановлюємо загальну кількість сторінок на основі загальної кількості записів
 				const totalCount = parseInt(response.headers.get('X-Total-Count'), 10)
 				setTotalCount(totalCount)
 				const totalPages = Math.ceil(totalCount / perPage)
@@ -72,34 +77,36 @@ export default function FindPerson({ blankFormData, formFieldsNames }) {
 			console.error('Error:', error)
 		}
 	}
-
+	// Функція для зміни поточної сторінки
 	const handlePageChange = pageNumber => {
 		setCurrentPage(pageNumber)
 	}
-
+	// Функція для зміни кількості записів на сторінці
 	const handlePerPageChange = e => {
 		setPerPage(parseInt(e.target.value, 10))
-		setCurrentPage(1) // Reset currentPage to 1 when changing perPage
+		setCurrentPage(1) // Скидаємо поточну сторінку на першу при зміні кількості записів на сторінці
 	}
-
+	// Функція для відправки запиту на сервер
 	const handleSubmit = async e => {
 		e.preventDefault()
 		await handleFetch(true)
 	}
-
+	// Функція для переходу на сторінку з детальною інформацією про особу
 	const handlePersonInfo = person => {
 		router.push(`/person-info/${person.unzr}`)
 	}
-
+	// Відображення компоненту
 	return (
 		<div>
 			<NavBar />
 			<Container>
 				<div>
+					{/* Заголовок сторінки */}
 					<h2 className='mt-5'>
 						Введіть часткові данні особи щоб знайти запис в електронному
 						реєстрі.
 					</h2>
+					{/* Компонент форми */}
 					<FormComponent
 						formData={formData}
 						formFieldsNames={formFieldsNames}
@@ -108,6 +115,7 @@ export default function FindPerson({ blankFormData, formFieldsNames }) {
 						handleChange={handleChange}
 						handleSubmit={handleSubmit}
 					/>
+					{/* Кнопка для відправки форми */}
 					<Button
 						variant='primary'
 						type='submit'
@@ -116,6 +124,7 @@ export default function FindPerson({ blankFormData, formFieldsNames }) {
 					>
 						Знайти особу
 					</Button>
+					{/* Кнопка для очищення форми */}
 					<Button
 						variant='secondary'
 						onClick={handleClear}
@@ -124,6 +133,7 @@ export default function FindPerson({ blankFormData, formFieldsNames }) {
 						Очистити форму
 					</Button>
 				</div>
+				{/* Відображення пагінації, якщо є кілька сторінок результатів */}
 				{totalPages > 0 && (
 					<div style={{ overflowX: 'auto', marginTop: 10, marginBottom: 10 }}>
 						<Pagination>
@@ -147,6 +157,7 @@ export default function FindPerson({ blankFormData, formFieldsNames }) {
 						</Pagination>
 					</div>
 				)}
+				{/* Форма для вибору кількості записів на сторінці */}
 				<Form style={{ marginBottom: 20 }}>
 					<Form.Group
 						controlId='formPerPage'
@@ -164,8 +175,10 @@ export default function FindPerson({ blankFormData, formFieldsNames }) {
 						</Form.Label>
 					</Form.Group>
 				</Form>
+				{/* Відображення результатів пошуку у вигляді таблиці */}
 				{results && (
 					<div>
+						{/* Виведення заголовка з кількістю знайдених записів */}
 						<h3>
 							Знайдено {totalCount}{' '}
 							{totalCount % 10 === 1 && totalCount % 100 !== 11
@@ -176,23 +189,28 @@ export default function FindPerson({ blankFormData, formFieldsNames }) {
 								? 'записи'
 								: 'записів'}
 						</h3>
+						{/* Таблиця з результатами пошуку */}
 						<Table className='mt-4' striped bordered hover>
 							<thead>
 								<tr>
+									{/* Виведення заголовків колонок */}
 									{Object.entries(formFieldsNames).map(([key, label]) => (
 										<th key={key}>{label}</th>
 									))}
-									<th>Дія</th> {/* Add a new header for the action column */}
+									<th>Дія</th>{' '}
+									{/* Додавання нового заголовка для стовпця з діями */}
 								</tr>
 							</thead>
 							<tbody>
-								{/* Map through results and render table rows */}
+								{/* Виведення результатів пошуку у вигляді рядків таблиці */}
 								{results.map((person, index) => (
 									<tr key={index}>
+										{/* Виведення даних згідно назв полів форми */}
 										{Object.keys(formFieldsNames).map(fieldName => (
 											<td key={fieldName}>{person[fieldName]}</td>
 										))}
 										<td>
+											{/* Кнопка для переходу на сторінку з детальною інформацією */}
 											<Button
 												variant='dark'
 												onClick={() => handlePersonInfo(person)}

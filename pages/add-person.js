@@ -1,11 +1,15 @@
 // pages/add-person.js
+
+// Імпортуємо необхідні бібліотеки та компоненти
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import NavBar from '../components/NavBar'
 import { Container, Form, Button } from 'react-bootstrap'
 import FormComponent from '../components/FormComponent'
 
+// Сторінка для додавання особи до реєстру
 export default function AddPerson({ blankFormData, formFieldsNames }) {
+	// Ініціалізуємо роутер та стани для форми
 	const router = useRouter()
 	const [formData, setFormData] = useState({ ...blankFormData })
 	const [isFieldsDisabled, setIsFieldsDisabled] = useState(false)
@@ -19,16 +23,16 @@ export default function AddPerson({ blankFormData, formFieldsNames }) {
 		passportNumber: true,
 		gender: true
 	})
-
+	// Функція для обробки зміни значення поля форми
 	const handleChange = e => {
 		const { name, value } = e.target
 		setFormData({ ...formData, [name]: value })
 	}
-
+	// Функція для очищення форми
 	const handleClear = () => {
 		setFormData({ ...blankFormData })
 	}
-
+	// Функція для обробки подання форми
 	const handleSubmit = async e => {
 		e.preventDefault()
 		console.log(formData)
@@ -53,15 +57,17 @@ export default function AddPerson({ blankFormData, formFieldsNames }) {
 			alert(`Помилка. Особу не вдалося додати до реєстру  ${error}`)
 		}
 	}
-
+	// Відображення компоненту
 	return (
 		<div>
 			<NavBar />
 			<Container>
 				<div>
+					{/* Заголовок сторінки */}
 					<h2 className='mt-5'>
 						Введіть повні данні особи щоб додати запис до електронного реєстру.
 					</h2>
+					{/* Компонент форми */}
 					<FormComponent
 						formFieldsNames={formFieldsNames}
 						formData={formData}
@@ -71,9 +77,11 @@ export default function AddPerson({ blankFormData, formFieldsNames }) {
 						handleSubmit={handleSubmit}
 						handleChange={handleChange}
 					/>
+					{/* Кнопка для очищення форми */}
 					<Button variant='secondary' onClick={handleClear} className='mt-3'>
 						Очистити форму
 					</Button>
+					{/* Кнопка для подання форми */}
 					<Button
 						variant='success'
 						type='submit'
