@@ -3,8 +3,8 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"dev": "cross-env dotenv -e .env.local -- next dev -H 10.0.20.10",
-		"start": "cross-env dotenv -e .env.local -- next start -H 10.0.20.10",
+		"dev": "cross-env dotenv -e .env.local -- next dev",
+		"start": "cross-env dotenv -e .env.local -- next start",
 		"build": "next build",
 		"lint": "next lint"
 	},

@@ -1,40 +1,63 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# rest-sync-client-next-js-page-router
 
-## Getting Started
+## Опис проекту
 
-First, run the development server:
+Цей проект є клієнтською частиною веб-додатка, реалізованого з використанням Next.js, яка забезпечує навігацію між сторінками та взаємодіє з RESTful API для обробки даних про осіб.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Вміст репозиторію
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- `pages/`: Директорія з файлами сторінок Next.js.
+- `components/`: Директорія з компонентами React, такими як навігаційне меню та форми.
+- `utils/`: Директорія з допоміжними утилітами, такими як функція для отримання заголовків для запитів до API.
+- `styles/`: Директорія для CSS стилів.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+## Встановлення
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+1. Клонуйте репозиторій на свій локальний комп'ютер:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+   ```bash
+   git clone <https://github.com/roman-lakhnov/rest-sync-client-next-js-page-router>
+2. Перейдіть до директорії проекту:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+    ```bash
+    cd rest-sync-client-next-js-page-router
+3. Встановіть залежності:
+  
+    ```bash
+    npm install
+4. Перейменуйте файл .env.example в .env.local та заповніть відповідні параметри.
+5. Запустіть проект:
+    ```bash
+    npm run dev
+6. Проект буде доступний за адресою http://localhost:3001.
 
-## Learn More
+## Використання
 
-To learn more about Next.js, take a look at the following resources:
+1. Навігація між сторінками здійснюється за допомогою навігаційного меню у верхній частині екрану.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. Додавання нової особи: перейдіть на сторінку "Додати особу" та заповніть форму, натиснувши кнопку "Надіслати форму і створити особу".
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+3. Пошук існуючої особи: перейдіть на сторінку "Знайти особу", введіть часткові дані особи у форму та натисніть кнопку "Знайти особу".
 
-## Deploy on Vercel
+4. Перегляд і редагування даних особи: після пошуку особи на сторінці результатів, натисніть кнопку "Інфо" для переходу на сторінку з детальною інформацією про особу. Тут можна редагувати або видаляти запис про особу.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## API
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Проект взаємодіє з RESTful API для отримання, додавання, оновлення та видалення даних про осіб. API має такі ендпоінти:
+
+- `/api/person`: Ендпоінт для додавання нової особи (POST) та пошуку існуючих осіб (GET).
+
+- `/api/person/[...unzr]`: Ендпоінт для отримання, оновлення та видалення даних про конкретну особу за її унікальним ідентифікатором
+
+## Ліцензія
+
+Цей проект має ліцензію MIT.
+
+
+
+
+
+
+
+
+

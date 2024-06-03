@@ -7,6 +7,7 @@ export default async function handler(req, res) {
 	const serviceUrl = `${process.env.SERVICE_URL}/person/unzr/${unzr}`
 
 	try {
+		logger.info(`Received ${method} request to ${serviceUrl}`); // Log the incoming request
 		let response
 		let data
 
@@ -30,6 +31,7 @@ export default async function handler(req, res) {
 				break
 
 			case 'PUT':
+				console.log(`Request body for PUT: ${JSON.stringify(body)}`); // Log request body for PUT requests
 				response = await fetch(serviceUrl, {
 					method: 'PUT',
 					headers: {
@@ -49,6 +51,7 @@ export default async function handler(req, res) {
 				break
 
 			case 'DELETE':
+				console.log(`Delete attempt`); // Log request body for PUT requests
 				response = await fetch(serviceUrl, {
 					method: 'DELETE',
 					headers: {
@@ -66,6 +69,7 @@ export default async function handler(req, res) {
 				res.status(405).json({ message: 'Method Not Allowed' })
 		}
 	} catch (error) {
+		console.log(`Internal Server Error: ${error.message}`); // Log internal server errors
 		res.status(500).json({ error: 'Internal Server Error', details: error })
 	}
 }

@@ -13,7 +13,7 @@ const FormComponent = ({
 			{Object.entries(formFieldsNames).map(([fieldName, label]) => (
 				<Form.Group controlId={`form${fieldName}`} key={fieldName}>
 					<Form.Label>{label}</Form.Label>
-					{fieldName === 'dateofbirth' ? (
+					{fieldName === 'dateOfBirth' ? (
 						<Form.Control
 							type='date'
 							name={fieldName}

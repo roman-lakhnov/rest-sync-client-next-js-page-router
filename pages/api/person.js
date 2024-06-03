@@ -6,11 +6,12 @@ export default async function handler(req, res) {
 	const serviceUrl = `${process.env.SERVICE_URL}/person`
 
 	try {
+		console.log(`Received ${method} request to ${serviceUrl}`); // Log the incoming request
 		let response
 		let data
-
 		switch (method) {
 			case 'POST':
+			console.log(`Request body: ${JSON.stringify(body)}`); // Log request body for POST requests
 				response = await fetch(serviceUrl, {
 					method: 'POST',
 					headers: {
@@ -28,6 +29,7 @@ export default async function handler(req, res) {
 				break
 
 			case 'GET':
+				console.log(`Query params: ${JSON.stringify(query)}`); // Log query parameters for GET requests
 				response = await fetch(
 					`${serviceUrl}?${new URLSearchParams(query).toString()}`,
 					{
@@ -50,6 +52,7 @@ export default async function handler(req, res) {
 				res.status(405).json({ message: 'Method Not Allowed' })
 		}
 	} catch (error) {
+		console.log(`Internal Server Error: ${error.message}`); // Log internal server errors
 		res.status(500).json({ error: 'Internal Server Error', details: error })
 	}
 }

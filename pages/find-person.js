@@ -183,7 +183,7 @@ export default function FindPerson({ blankFormData, formFieldsNames }) {
 										<th key={key}>{label}</th>
 									))}
 									<th>Дія</th> {/* Add a new header for the action column */}
-								</tr>{' '}
+								</tr>
 							</thead>
 							<tbody>
 								{/* Map through results and render table rows */}
@@ -193,8 +193,6 @@ export default function FindPerson({ blankFormData, formFieldsNames }) {
 											<td key={fieldName}>{person[fieldName]}</td>
 										))}
 										<td>
-											{' '}
-											{/* Add a button to view person's information */}
 											<Button
 												variant='dark'
 												onClick={() => handlePersonInfo(person)}
