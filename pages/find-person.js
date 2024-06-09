@@ -8,7 +8,12 @@ import { useEffect, useState } from 'react'
 import { Button, Container, Form, Pagination, Table } from 'react-bootstrap'
 
 // Сторінка для пошуку особи в реєстрі
-export default function FindPerson({ blankFormData, formFieldsNames }) {
+export default function FindPerson({
+	blankFormData,
+	formFieldsNames,
+	setSelectedPerson,
+	selectedPerson
+}) {
 	// Ініціалізуємо роутер та стани для форми та результатів пошуку
 	const router = useRouter()
 	const [isFieldsDisabled, setIsFieldsDisabled] = useState(false)
@@ -64,19 +69,22 @@ export default function FindPerson({ blankFormData, formFieldsNames }) {
 			})
 			if (response.ok) {
 				const data = await response.json()
-				setResults(data)
-				// Встановлюємо загальну кількість сторінок на основі загальної кількості записів
-				const totalCount = parseInt(response.headers.get('X-Total-Count'), 10)
+				setResults(data.persons)
+				console.log(data.persons[0])
+				const totalCount = data.totalCount
 				setTotalCount(totalCount)
 				const totalPages = Math.ceil(totalCount / perPage)
 				setTotalPages(totalPages)
 			} else {
-				console.error('Error fetching data')
+				setResults([])
+				setTotalCount(0)
+				setTotalPages(1)
 			}
 		} catch (error) {
 			console.error('Error:', error)
 		}
 	}
+
 	// Функція для зміни поточної сторінки
 	const handlePageChange = pageNumber => {
 		setCurrentPage(pageNumber)
@@ -93,12 +101,13 @@ export default function FindPerson({ blankFormData, formFieldsNames }) {
 	}
 	// Функція для переходу на сторінку з детальною інформацією про особу
 	const handlePersonInfo = person => {
-		router.push(`/person-info/${person.unzr}`)
+		setSelectedPerson(person)
+		router.push(`/read-person`)
 	}
 	// Відображення компоненту
 	return (
 		<div>
-			<NavBar />
+			<NavBar selectedPerson={selectedPerson} />
 			<Container>
 				<div>
 					{/* Заголовок сторінки */}
@@ -190,38 +199,42 @@ export default function FindPerson({ blankFormData, formFieldsNames }) {
 								: 'записів'}
 						</h3>
 						{/* Таблиця з результатами пошуку */}
-						<Table className='mt-4' striped bordered hover>
-							<thead>
-								<tr>
-									{/* Виведення заголовків колонок */}
-									{Object.entries(formFieldsNames).map(([key, label]) => (
-										<th key={key}>{label}</th>
-									))}
-									<th>Дія</th>{' '}
-									{/* Додавання нового заголовка для стовпця з діями */}
-								</tr>
-							</thead>
-							<tbody>
-								{/* Виведення результатів пошуку у вигляді рядків таблиці */}
-								{results.map((person, index) => (
-									<tr key={index}>
-										{/* Виведення даних згідно назв полів форми */}
-										{Object.keys(formFieldsNames).map(fieldName => (
-											<td key={fieldName}>{person[fieldName]}</td>
+						{totalCount > 0 ? (
+							<Table className='mt-4' striped bordered hover>
+								<thead>
+									<tr>
+										{/* Виведення заголовків колонок */}
+										{Object.entries(formFieldsNames).map(([key, label]) => (
+											<th key={key}>{label}</th>
 										))}
-										<td>
-											{/* Кнопка для переходу на сторінку з детальною інформацією */}
-											<Button
-												variant='dark'
-												onClick={() => handlePersonInfo(person)}
-											>
-												Інфо
-											</Button>
-										</td>
+										<th>Дія</th>{' '}
+										{/* Додавання нового заголовка для стовпця з діями */}
 									</tr>
-								))}
-							</tbody>
-						</Table>
+								</thead>
+								<tbody>
+									{/* Виведення результатів пошуку у вигляді рядків таблиці */}
+									{results.map((person, index) => (
+										<tr key={index}>
+											{/* Виведення даних згідно назв полів форми */}
+											{Object.keys(formFieldsNames).map(fieldName => (
+												<td key={fieldName}>{person[fieldName]}</td>
+											))}
+											<td>
+												{/* Кнопка для переходу на сторінку з детальною інформацією */}
+												<Button
+													variant='dark'
+													onClick={() => handlePersonInfo(person)}
+												>
+													Інфо
+												</Button>
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</Table>
+						) : (
+							''
+						)}
 					</div>
 				)}
 			</Container>

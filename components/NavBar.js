@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Container, Nav, Navbar } from 'react-bootstrap'
 
 // Компонент навігаційного меню
-const NavBar = () => {
+const NavBar = ({selectedPerson}) => {
 	return (
 		// Верхнє меню навігації
 		<Navbar bg='dark' variant='dark' expand='lg'>
@@ -23,6 +23,11 @@ const NavBar = () => {
 						<Link className='nav-link' href={'/find-person'}>
 							Знайти особу в реєстрі
 						</Link>
+						{selectedPerson&&
+						<Link className='nav-link' href={'/read-person'}>
+							Профіль особи: {selectedPerson.name} {selectedPerson.surname}
+						</Link>
+						}
 					</Nav>
 				</Navbar.Collapse>
 			</Container>

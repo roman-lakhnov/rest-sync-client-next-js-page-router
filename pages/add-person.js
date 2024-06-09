@@ -8,7 +8,12 @@ import { Container, Form, Button } from 'react-bootstrap'
 import FormComponent from '../components/FormComponent'
 
 // Сторінка для додавання особи до реєстру
-export default function AddPerson({ blankFormData, formFieldsNames }) {
+export default function AddPerson({
+	blankFormData,
+	formFieldsNames,
+	selectedPerson,
+	setSelectedPerson
+}) {
 	// Ініціалізуємо роутер та стани для форми
 	const router = useRouter()
 	const [formData, setFormData] = useState({ ...blankFormData })
@@ -44,13 +49,13 @@ export default function AddPerson({ blankFormData, formFieldsNames }) {
 				},
 				body: JSON.stringify(formData)
 			})
+			const data = await response.json()
 			if (response.ok) {
-				alert('Запис доданий до електронного реєстру. Профіль особи створено. ')
-				router.push(`/person-info/${formData.unzr}`)
+				alert('Запис доданий до електронного реєстру. Профіль особи створено.')
+				setSelectedPerson(data)
+				router.push(`/read-person`)
 			} else {
-				const data = await response.json()
-				const textMessage = JSON.stringify(data)
-				alert(`Помилка. Особу не вдалося додати до реєстру ${textMessage}`)
+				alert(`Помилка. Особу не вдалося додати до реєстру ${data}`)
 			}
 		} catch (error) {
 			console.error('Error:', error)
@@ -60,7 +65,7 @@ export default function AddPerson({ blankFormData, formFieldsNames }) {
 	// Відображення компоненту
 	return (
 		<div>
-			<NavBar />
+			<NavBar selectedPerson={selectedPerson} />
 			<Container>
 				<div>
 					{/* Заголовок сторінки */}

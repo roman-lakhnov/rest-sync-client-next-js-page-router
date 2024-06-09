@@ -6,11 +6,11 @@ import Link from 'next/link'
 import { Container } from 'react-bootstrap'
 
 // Головна сторінка
-export default function Home() {
+export default function Home({ selectedPerson }) {
 	return (
 		<div>
 			{/* Відображення верхнього меню навігації */}
-			<NavBar />
+			<NavBar selectedPerson={selectedPerson} />
 			{/* Контейнер з вмістом сторінки */}
 			<Container className='mt-5'>
 				{/* Секція з головним вмістом сторінки */}

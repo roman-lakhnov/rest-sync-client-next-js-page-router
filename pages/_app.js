@@ -2,6 +2,7 @@
 // Імпортуємо стилі Bootstrap та глобальні стилі нашого додатку.
 import 'bootstrap/dist/css/bootstrap.min.css'
 import '@/styles/globals.css'
+import { useState } from 'react'
 
 // Основний компонент додатку, який обгортає всі інші компоненти Next.js.
 const MyApp = ({ Component, pageProps }) => {
@@ -27,12 +28,15 @@ const MyApp = ({ Component, pageProps }) => {
 		rnokpp: 'РНОКПП',
 		passportNumber: 'Номер паспорту'
 	}
+	const [selectedPerson, setSelectedPerson] = useState(null)
 	// Передаємо пусті дані форми та назви полів як пропси до компонента.
 	return (
 		<Component
 			{...pageProps}
 			blankFormData={blankFormData}
 			formFieldsNames={formFieldsNames}
+			selectedPerson={selectedPerson}
+			setSelectedPerson={setSelectedPerson}
 		/>
 	)
 }

@@ -1,5 +1,3 @@
-// pages/person/[...id].js
-
 // Імпортуємо необхідні бібліотеки та компоненти
 import FormComponent from '@/components/FormComponent'
 import NavBar from '@/components/NavBar'
@@ -8,10 +6,14 @@ import { useEffect, useState } from 'react'
 import { Button, Container } from 'react-bootstrap'
 
 // Сторінка профіль особи
-const PersonInfo = ({ blankFormData, formFieldsNames }) => {
+const ReadPerson = ({
+	blankFormData,
+	formFieldsNames,
+	setSelectedPerson,
+	selectedPerson
+}) => {
 	const router = useRouter()
-	const { unzr } = router.query
-	const [loading, setLoading] = useState(true)
+	console.log(selectedPerson)
 	const [formData, setFormData] = useState({ ...blankFormData })
 	const [isFieldsDisabled, setIsFieldsDisabled] = useState(true)
 	const [isDataRequired, setIsDataRequired] = useState({
@@ -24,36 +26,12 @@ const PersonInfo = ({ blankFormData, formFieldsNames }) => {
 		passportNumber: true,
 		gender: true
 	})
-	// Ефект, який викликається при зміні параметра "unzr"
+
 	useEffect(() => {
-		fetchPersonInfo() // Виклик функції отримання інформації про особу
-	}, [unzr])
-	// Функція для отримання інформації про особу
-	const fetchPersonInfo = async () => {
-		console.log(unzr)
-		if (unzr) {
-			try {
-				const response = await fetch(
-					`${process.env.API_URL}/person/unzr/${unzr}`,
-					{
-						method: 'GET',
-						headers: {}
-					}
-				)
-				if (response.ok) {
-					const data = await response.json()
-					setFormData(data) // Оновлення даних форми
-				} else {
-					console.error('Failed to fetch person information')
-				}
-			} catch (error) {
-				console.error('Error:', error)
-			} finally {
-				setLoading(false) // Встановлення стану завантаження в "false"
-			}
+		if (selectedPerson) {
+			setFormData(selectedPerson)
 		}
-	}
-	// Функція для зміни стану заблокованості полів форми
+	}, [selectedPerson])
 	const toggleDisabled = () => {
 		setIsFieldsDisabled(!isFieldsDisabled)
 	}
@@ -69,22 +47,24 @@ const PersonInfo = ({ blankFormData, formFieldsNames }) => {
 	const handleSubmit = async e => {
 		e.preventDefault()
 		try {
-			const response = await fetch(
-				`${process.env.API_URL}/person/unzr/${unzr}`,
-				{
-					method: 'PUT',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify(formData)
-				}
-			)
-
+			const response = await fetch(`${process.env.API_URL}/person`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					attribute: 'unzr',
+					value: selectedPerson.unzr,
+					...formData
+				})
+			})
+			const data = await response.json()
 			if (response.ok) {
-				alert('Зміни збережено. Профіль особи оновлено.')
+				setSelectedPerson(formData)
+				alert(data)
 				setIsFieldsDisabled(!isFieldsDisabled) // Зміна стану блокування полів форми
 			} else {
-				console.error('Failed to update person:', response.statusText)
+				alert(data)
 			}
 		} catch (error) {
 			console.error('Error updating person:', error)
@@ -92,35 +72,32 @@ const PersonInfo = ({ blankFormData, formFieldsNames }) => {
 	}
 	// Функція для обробки видалення запису про особу
 	const handleDelete = async () => {
+		const params = new URLSearchParams({
+			attribute: 'unzr',
+			value: selectedPerson.unzr
+		})
 		try {
-			const response = await fetch(
-				`${process.env.API_URL}/person/unzr/${unzr}`,
-				{
-					method: 'DELETE',
-					headers: {}
-				}
-			)
-
+			const response = await fetch(`${process.env.API_URL}/person?${params}`, {
+				method: 'DELETE',
+				headers: {}
+			})
+			const data = await response.json()
 			if (response.ok) {
-				alert('Запис було видалено. Профіль особи відсутній.')
-				setFormData({ ...blankFormData }) // Оновлення даних форми
+				alert(data)
+				setSelectedPerson(null)
 				router.push(`/find-person`) // Перенаправлення на сторінку пошуку осіб
 			} else {
-				console.error('Failed to delete person:', response.statusText)
+				alert(data)
 			}
 		} catch (error) {
 			console.error('Error deleting person:', error)
 		}
 	}
 
-	if (loading) {
-		return <div>Завантаження...</div> // Відображення тексту "Завантаження..." поки триває завантаження
-	}
-
 	return (
 		<div>
 			{/* Компонент навігаційного бару */}
-			<NavBar />
+			<NavBar selectedPerson={selectedPerson} />
 			<Container>
 				{/* Заголовок сторінки */}
 				<h2 className='mt-5'>Профіль особи</h2>
@@ -163,4 +140,4 @@ const PersonInfo = ({ blankFormData, formFieldsNames }) => {
 	)
 }
 
-export default PersonInfo
+export default ReadPerson
