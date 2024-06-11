@@ -6,6 +6,7 @@ import NavBar from '@/components/NavBar'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Button, Container, Form, Pagination, Table } from 'react-bootstrap'
+import { toast } from 'react-toastify'
 
 // Сторінка для пошуку особи в реєстрі
 export default function FindPerson({
@@ -44,6 +45,7 @@ export default function FindPerson({
 	}
 	// Функція для очищення форми
 	const handleClear = () => {
+		toast.info('Форму очищено') //  notification
 		setFormData({ ...blankFormData })
 	}
 	// Функція для виконання запиту на сервер
@@ -75,6 +77,16 @@ export default function FindPerson({
 				setTotalCount(totalCount)
 				const totalPages = Math.ceil(totalCount / perPage)
 				setTotalPages(totalPages)
+				let toastMessage = `Знайдено ${totalCount} ${
+					totalCount % 10 === 1 && totalCount % 100 !== 11
+						? 'запис'
+						: totalCount % 10 >= 2 &&
+						  totalCount % 10 <= 4 &&
+						  (totalCount % 100 < 10 || totalCount % 100 >= 20)
+						? 'записи'
+						: 'записів'
+				}`
+				toast.info(toastMessage) //  notification
 			} else {
 				setResults([])
 				setTotalCount(0)

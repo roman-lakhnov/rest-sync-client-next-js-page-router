@@ -4,6 +4,7 @@ import NavBar from '@/components/NavBar'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { Button, Container } from 'react-bootstrap'
+import { toast } from 'react-toastify'
 
 // Сторінка профіль особи
 const ReadPerson = ({
@@ -34,6 +35,7 @@ const ReadPerson = ({
 	}, [selectedPerson])
 	const toggleDisabled = () => {
 		setIsFieldsDisabled(!isFieldsDisabled)
+		toast.info(`${!isFieldsDisabled? 'Запис заблоковано': 'Запис розблоковано'}`)
 	}
 	// Функція для обробки зміни значення в полі форми
 	const handleChange = e => {
@@ -61,10 +63,10 @@ const ReadPerson = ({
 			const data = await response.json()
 			if (response.ok) {
 				setSelectedPerson(formData)
-				alert(data)
+				toast.success(data) // Success notification
 				setIsFieldsDisabled(!isFieldsDisabled) // Зміна стану блокування полів форми
 			} else {
-				alert(data)
+				toast.error(data) // Error notification
 			}
 		} catch (error) {
 			console.error('Error updating person:', error)
@@ -83,11 +85,11 @@ const ReadPerson = ({
 			})
 			const data = await response.json()
 			if (response.ok) {
-				alert(data)
+				toast.success(data) // Success notification
 				setSelectedPerson(null)
 				router.push(`/find-person`) // Перенаправлення на сторінку пошуку осіб
 			} else {
-				alert(data)
+				toast.error(data) // Error notification
 			}
 		} catch (error) {
 			console.error('Error deleting person:', error)

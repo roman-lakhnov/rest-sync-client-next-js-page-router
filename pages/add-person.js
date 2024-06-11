@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation'
 import NavBar from '../components/NavBar'
 import { Container, Form, Button } from 'react-bootstrap'
 import FormComponent from '../components/FormComponent'
+import { toast } from 'react-toastify';
+
 
 // Сторінка для додавання особи до реєстру
 export default function AddPerson({
@@ -36,6 +38,7 @@ export default function AddPerson({
 	// Функція для очищення форми
 	const handleClear = () => {
 		setFormData({ ...blankFormData })
+		toast.info('Форму очищено'); //  notification
 	}
 	// Функція для обробки подання форми
 	const handleSubmit = async e => {
@@ -51,15 +54,15 @@ export default function AddPerson({
 			})
 			const data = await response.json()
 			if (response.ok) {
-				alert('Запис доданий до електронного реєстру. Профіль особи створено.')
+				toast.success('Запис доданий до електронного реєстру. Профіль особи створено.'); // Success notification
 				setSelectedPerson(data)
 				router.push(`/read-person`)
 			} else {
-				alert(`Помилка. Особу не вдалося додати до реєстру ${data}`)
+				toast.error(`Помилка. Особу не вдалося додати до реєстру ${data}`); // Error notification
 			}
 		} catch (error) {
 			console.error('Error:', error)
-			alert(`Помилка. Особу не вдалося додати до реєстру  ${error}`)
+			toast.error(`Помилка. Особу не вдалося додати до реєстру  ${error}`); // Error notification
 		}
 	}
 	// Відображення компоненту

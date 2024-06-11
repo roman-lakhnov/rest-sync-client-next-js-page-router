@@ -3,6 +3,8 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import '@/styles/globals.css'
 import { useState } from 'react'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 // Основний компонент додатку, який обгортає всі інші компоненти Next.js.
 const MyApp = ({ Component, pageProps }) => {
@@ -31,13 +33,16 @@ const MyApp = ({ Component, pageProps }) => {
 	const [selectedPerson, setSelectedPerson] = useState(null)
 	// Передаємо пусті дані форми та назви полів як пропси до компонента.
 	return (
-		<Component
-			{...pageProps}
-			blankFormData={blankFormData}
-			formFieldsNames={formFieldsNames}
-			selectedPerson={selectedPerson}
-			setSelectedPerson={setSelectedPerson}
-		/>
+		<div>
+			<Component
+				{...pageProps}
+				blankFormData={blankFormData}
+				formFieldsNames={formFieldsNames}
+				selectedPerson={selectedPerson}
+				setSelectedPerson={setSelectedPerson}
+			/>
+			<ToastContainer />
+		</div>
 	)
 }
 // Експортуємо основний компонент додатку.

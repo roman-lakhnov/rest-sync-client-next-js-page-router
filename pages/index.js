@@ -3,10 +3,14 @@
 // Імпортуємо компоненти з бібліотек
 import NavBar from '@/components/NavBar'
 import Link from 'next/link'
-import { Container } from 'react-bootstrap'
+import { Button, Col, Container, Row } from 'react-bootstrap'
 
 // Головна сторінка
 export default function Home({ selectedPerson }) {
+	const handleDownload = () => {
+		window.location.href = '/cert/cert.pem' // посилання на серверний файл
+	}
+
 	return (
 		<div>
 			{/* Відображення верхнього меню навігації */}
@@ -48,6 +52,21 @@ export default function Home({ selectedPerson }) {
 						Ми сподіваємось, що ви знайдете наш сервіс корисним та зручним у
 						використанні.
 					</p>
+
+					<Row className='align-items-center mt-4'>
+						<Col md='auto'>
+							<p className='mb-0'>Щоб завантажити сертифікат натисніть сюди:</p>
+						</Col>
+						<Col md='auto'>
+							<Button
+								variant='secondary'
+								href='/api/download'
+								download='cert.pem'
+							>
+								Завантажити cert.pem
+							</Button>
+						</Col>
+					</Row>
 				</section>
 			</Container>
 		</div>
