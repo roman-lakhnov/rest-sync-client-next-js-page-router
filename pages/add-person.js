@@ -1,13 +1,10 @@
-// pages/add-person.js
-
-// Імпортуємо необхідні бібліотеки та компоненти
-import { useState } from 'react'
+import FormComponent from '@/components/FormComponent'
+import NavBar from '@/components/NavBar'
+import axios from '@/utils/axiosFrontend'
 import { useRouter } from 'next/navigation'
-import NavBar from '../components/NavBar'
-import { Container, Form, Button } from 'react-bootstrap'
-import FormComponent from '../components/FormComponent'
-import { toast } from 'react-toastify';
-
+import { useState } from 'react'
+import { Button, Container } from 'react-bootstrap'
+import { toast } from 'react-toastify'
 
 // Сторінка для додавання особи до реєстру
 export default function AddPerson({
@@ -38,31 +35,31 @@ export default function AddPerson({
 	// Функція для очищення форми
 	const handleClear = () => {
 		setFormData({ ...blankFormData })
-		toast.info('Форму очищено'); //  notification
+		toast.info('Форму очищено') //  notification
 	}
 	// Функція для обробки подання форми
 	const handleSubmit = async e => {
 		e.preventDefault()
-		console.log(formData)
+		// console.log(formData)
 		try {
-			const response = await fetch(`${process.env.API_URL}/person`, {
-				method: 'POST',
+			const response = await axios.post(`/person`, formData, {
 				headers: {
 					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(formData)
+				}
 			})
-			const data = await response.json()
-			if (response.ok) {
-				toast.success('Запис доданий до електронного реєстру. Профіль особи створено.'); // Success notification
+			const data = response.data
+			if (response.status === 201) {
+				toast.success(
+					'Запис доданий до електронного реєстру. Профіль особи створено.'
+				)
 				setSelectedPerson(data)
 				router.push(`/read-person`)
 			} else {
-				toast.error(`Помилка. Особу не вдалося додати до реєстру ${data}`); // Error notification
+				toast.error(`Помилка. Особу не вдалося додати до реєстру ${data}`)
 			}
 		} catch (error) {
 			console.error('Error:', error)
-			toast.error(`Помилка. Особу не вдалося додати до реєстру  ${error}`); // Error notification
+			toast.error(`Помилка. Особу не вдалося додати до реєстру ${error}`)
 		}
 	}
 	// Відображення компоненту

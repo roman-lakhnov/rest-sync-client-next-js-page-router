@@ -1,19 +1,9 @@
-// pages/api/download.js
 import fs from 'fs';
 import path from 'path';
 
 export default function handler(req, res) {
-  const { fileType, fileName } = req.query;
-
-  let filePath;
-
-  if (fileType === 'asic') {
-    filePath = path.join(process.cwd(), 'asic', fileName);
-  } else if (fileType === 'cert') {
-    filePath = path.join(process.cwd(), 'certs', 'cert.pem');
-  } else {
-    return res.status(400).json({ error: 'Invalid file type' });
-  }
+  const { fileName } = req.query;
+  const filePath = path.join(process.cwd(), 'asic', fileName);
 
   try {
     if (fs.existsSync(filePath)) {

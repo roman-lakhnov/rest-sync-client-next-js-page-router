@@ -7,19 +7,36 @@ const nextConfig = {
 	reactStrictMode: true,
 	// Змінні середовища для доступу у додатку
 	env: {
-		API_URL: process.env.API_URL,
-		SERVICE_URL: process.env.SERVICE_URL,
-		HEADERS: process.env.HEADERS,
-		IF_CLIENT_GENERATES_TRANSACTION_ID: process.env.IF_CLIENT_GENERATES_TRANSACTION_ID
+		PROTOCOL: process.env.PROTOCOL,
+		SECURITY_SERVER_IP: process.env.SECURITY_SERVER_IP,
+		INSTANCE_NAME: process.env.INSTANCE_NAME,
+		CLIENT_MEMBER_CLASS: process.env.CLIENT_MEMBER_CLASS,
+		CLIENT_MEMBER_CODE: process.env.CLIENT_MEMBER_CODE,
+		CLIENT_SUBSYSTEM: process.env.CLIENT_SUBSYSTEM,
+		IF_CLIENT_SAVE_ASIC: process.env.IF_CLIENT_SAVE_ASIC,
+		SERVICE_MEMBER_CLASS: process.env.SERVICE_MEMBER_CLASS,
+		SERVICE_MEMBER_CODE: process.env.SERVICE_MEMBER_CODE,
+		SERVICE_SUBSYSTEM: process.env.SERVICE_SUBSYSTEM,
+		SERVICE_CODE: process.env.SERVICE_CODE,
+		SERVICE_VERSION: process.env.SERVICE_VERSION
 		// Інші змінні для використання на сервері
 	}
 }
 // Виведення змінних середовища у консоль, якщо режим не є продакшеном
 if (process.env.NODE_ENV !== 'production') {
 	console.log('Loaded environment variables:', {
-		API_URL: process.env.API_URL,
-		SERVICE_URL: process.env.SERVICE_URL,
-		HEADERS: process.env.HEADERS
+		PROTOCOL: process.env.PROTOCOL,
+		SECURITY_SERVER_IP: process.env.SECURITY_SERVER_IP,
+		INSTANCE_NAME: process.env.INSTANCE_NAME,
+		CLIENT_MEMBER_CLASS: process.env.CLIENT_MEMBER_CLASS,
+		CLIENT_MEMBER_CODE: process.env.CLIENT_MEMBER_CODE,
+		CLIENT_SUBSYSTEM: process.env.CLIENT_SUBSYSTEM,
+		IF_CLIENT_SAVE_ASIC: process.env.IF_CLIENT_SAVE_ASIC,
+		SERVICE_MEMBER_CLASS: process.env.SERVICE_MEMBER_CLASS,
+		SERVICE_MEMBER_CODE: process.env.SERVICE_MEMBER_CODE,
+		SERVICE_SUBSYSTEM: process.env.SERVICE_SUBSYSTEM,
+		SERVICE_CODE: process.env.SERVICE_CODE,
+		SERVICE_VERSION: process.env.SERVICE_VERSION
 	})
 }
 // Експортування об'єкту конфігурації Next.js

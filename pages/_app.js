@@ -41,7 +41,7 @@ const MyApp = ({ Component, pageProps }) => {
 				selectedPerson={selectedPerson}
 				setSelectedPerson={setSelectedPerson}
 			/>
-			<ToastContainer />
+			<ToastContainer style={{ marginTop: '56px' }} />
 		</div>
 	)
 }

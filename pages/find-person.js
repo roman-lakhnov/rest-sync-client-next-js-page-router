@@ -1,10 +1,10 @@
-// pages/find-person.js
-
-// Імпортуємо необхідні бібліотеки та компоненти
+import DropdownComponent from '@/components/DropdownComponent'
 import FormComponent from '@/components/FormComponent'
 import NavBar from '@/components/NavBar'
+import PaginationComponent from '@/components/PaginationComponent'
+import axios from '@/utils/axiosFrontend'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { Button, Container, Form, Pagination, Table } from 'react-bootstrap'
 import { toast } from 'react-toastify'
 
@@ -17,94 +17,119 @@ export default function FindPerson({
 }) {
 	// Ініціалізуємо роутер та стани для форми та результатів пошуку
 	const router = useRouter()
-	const [isFieldsDisabled, setIsFieldsDisabled] = useState(false)
-	const [formData, setFormData] = useState({ ...blankFormData })
-	const [results, setResults] = useState(null)
-	const [currentPage, setCurrentPage] = useState(1)
-	const [totalPages, setTotalPages] = useState(1)
-	const [perPage, setPerPage] = useState(50)
-	const [totalCount, setTotalCount] = useState()
-	const [isDataRequired, setIsDataRequired] = useState({
-		name: false,
-		surname: false,
-		patronym: false,
-		dateOfBirth: false,
-		rnokpp: false,
-		unzr: false,
-		passportNumber: false,
-		gender: false
+	const [state, setState] = useState({
+		isFieldsDisabled: false,
+		formData: { ...blankFormData },
+		results: null,
+		currentPage: 1,
+		totalPages: 1,
+		perPage: 50,
+		totalCount: 0,
+		isDataRequired: {
+			name: false,
+			surname: false,
+			patronym: false,
+			dateOfBirth: false,
+			rnokpp: false,
+			unzr: false,
+			passportNumber: false,
+			gender: false
+		}
 	})
-	// Функція для виконання запиту на сервер при зміні сторінки або кількості записів на сторінці
-	useEffect(() => {
-		handleFetch()
-	}, [currentPage, perPage])
 	// Функція для обробки зміни значення поля форми
 	const handleChange = e => {
 		const { name, value } = e.target
-		setFormData({ ...formData, [name]: value })
+		setState(prevState => ({
+			...prevState,
+			formData: { ...prevState.formData, [name]: value }
+		}))
 	}
 	// Функція для очищення форми
 	const handleClear = () => {
-		toast.info('Форму очищено') //  notification
-		setFormData({ ...blankFormData })
+		toast.info('Форму очищено') // notification
+		setState(prevState => ({
+			...prevState,
+			formData: { ...blankFormData }
+		}))
 	}
 	// Функція для виконання запиту на сервер
-	const handleFetch = async (pageReset = false, e) => {
-		if (e) {
-			e.preventDefault()
-		}
-		if (pageReset) {
-			setCurrentPage(1)
-		}
-		const filteredFormData = Object.fromEntries(
-			Object.entries(formData).filter(([_, value]) => value)
-		)
-		const params = new URLSearchParams({
-			...filteredFormData,
-			_page: currentPage,
-			_limit: perPage
-		})
-		try {
-			const response = await fetch(`${process.env.API_URL}/person?${params}`, {
-				method: 'GET',
-				headers: {}
-			})
-			if (response.ok) {
-				const data = await response.json()
-				setResults(data.persons)
-				console.log(data.persons[0])
-				const totalCount = data.totalCount
-				setTotalCount(totalCount)
-				const totalPages = Math.ceil(totalCount / perPage)
-				setTotalPages(totalPages)
-				let toastMessage = `Знайдено ${totalCount} ${
-					totalCount % 10 === 1 && totalCount % 100 !== 11
-						? 'запис'
-						: totalCount % 10 >= 2 &&
-						  totalCount % 10 <= 4 &&
-						  (totalCount % 100 < 10 || totalCount % 100 >= 20)
-						? 'записи'
-						: 'записів'
-				}`
-				toast.info(toastMessage) //  notification
-			} else {
-				setResults([])
-				setTotalCount(0)
-				setTotalPages(1)
+	const handleFetch = useCallback(
+		async (pageReset = false, e) => {
+			if (e) {
+				e.preventDefault()
 			}
-		} catch (error) {
-			console.error('Error:', error)
-		}
-	}
+			if (pageReset) {
+				setState(prevState => ({
+					...prevState,
+					currentPage: 1
+				}))
+			}
 
+			const { formData, currentPage, perPage } = state
+			const filteredFormData = Object.fromEntries(
+				Object.entries(formData).filter(([_, value]) => value)
+			)
+			const params = new URLSearchParams({
+				...filteredFormData,
+				_page: currentPage,
+				_limit: perPage
+			})
+			try {
+				const response = await axios.get(`/person`, { params })
+
+				if (response.status === 200) {
+					const data = response.data
+					const totalCount = data.totalCount
+					const totalPages = Math.ceil(totalCount / perPage)
+					setState(prevState => ({
+						...prevState,
+						results: data.persons,
+						totalCount,
+						totalPages
+					}))
+
+					let toastMessage = `Знайдено ${totalCount} ${
+						totalCount % 10 === 1 && totalCount % 100 !== 11
+							? 'запис'
+							: totalCount % 10 >= 2 &&
+							  totalCount % 10 <= 4 &&
+							  (totalCount % 100 < 10 || totalCount % 100 >= 20)
+							? 'записи'
+							: 'записів'
+					}`
+					toast.info(toastMessage)
+				} else {
+					console.log(response)
+					toast.error(response.data)
+					setState(prevState => ({
+						...prevState,
+						results: [],
+						totalCount: 0,
+						totalPages: 1
+					}))
+				}
+			} catch (error) {
+				console.log(error)
+				toast.error('Внутрішня помилка серверу')
+			}
+		},
+		[state.formData, state.currentPage, state.perPage]
+	)
 	// Функція для зміни поточної сторінки
 	const handlePageChange = pageNumber => {
-		setCurrentPage(pageNumber)
+		setState(prevState => ({
+			...prevState,
+			currentPage: pageNumber
+		}))
 	}
 	// Функція для зміни кількості записів на сторінці
 	const handlePerPageChange = e => {
-		setPerPage(parseInt(e.target.value, 10))
-		setCurrentPage(1) // Скидаємо поточну сторінку на першу при зміні кількості записів на сторінці
+		const newPerPage = parseInt(e.target.value, 10)
+		setState(prevState => ({
+			...prevState,
+			perPage: newPerPage,
+			currentPage: 1 // Скидаємо поточну сторінку на першу при зміні кількості записів на сторінці
+		}))
 	}
 	// Функція для відправки запиту на сервер
 	const handleSubmit = async e => {
@@ -116,6 +141,11 @@ export default function FindPerson({
 		setSelectedPerson(person)
 		router.push(`/read-person`)
 	}
+	// Функція для виконання запиту на сервер при зміні сторінки або кількості записів на сторінці
+	useEffect(() => {
+		handleFetch()
+	}, [state.currentPage, state.perPage])
+
 	// Відображення компоненту
 	return (
 		<div>
@@ -129,10 +159,10 @@ export default function FindPerson({
 					</h2>
 					{/* Компонент форми */}
 					<FormComponent
-						formData={formData}
+						formData={state.formData}
 						formFieldsNames={formFieldsNames}
-						isDataRequired={isDataRequired}
-						isFieldsDisabled={isFieldsDisabled}
+						isDataRequired={state.isDataRequired}
+						isFieldsDisabled={state.isFieldsDisabled}
 						handleChange={handleChange}
 						handleSubmit={handleSubmit}
 					/>
@@ -155,63 +185,36 @@ export default function FindPerson({
 					</Button>
 				</div>
 				{/* Відображення пагінації, якщо є кілька сторінок результатів */}
-				{totalPages > 0 && (
-					<div style={{ overflowX: 'auto', marginTop: 10, marginBottom: 10 }}>
-						<Pagination>
-							<Pagination.Prev
-								onClick={() => handlePageChange(currentPage - 1)}
-								disabled={currentPage === 1}
-							/>
-							{[...Array(totalPages)].map((_, index) => (
-								<Pagination.Item
-									key={index + 1}
-									active={index + 1 === currentPage}
-									onClick={() => handlePageChange(index + 1)}
-								>
-									{index + 1}
-								</Pagination.Item>
-							))}
-							<Pagination.Next
-								onClick={() => handlePageChange(currentPage + 1)}
-								disabled={currentPage === totalPages}
-							/>
-						</Pagination>
-					</div>
+				{state.totalPages > 0 && (
+					<PaginationComponent
+						currentPage={state.currentPage}
+						totalPages={state.totalPages}
+						onPageChange={handlePageChange}
+					/>
 				)}
 				{/* Форма для вибору кількості записів на сторінці */}
-				<Form style={{ marginBottom: 20 }}>
-					<Form.Group
-						controlId='formPerPage'
-						className='row align-items-center'
-					>
-						<div className='col-sm-1'>
-							<Form.Select value={perPage} onChange={handlePerPageChange}>
-								<option value='10'>10</option>
-								<option value='50'>50</option>
-								<option value='100'>100</option>
-							</Form.Select>
-						</div>
-						<Form.Label className='col-sm-11'>
-							Кількість записів на сторінці
-						</Form.Label>
-					</Form.Group>
-				</Form>
+			  <DropdownComponent
+          label='Кількість записів на сторінці'
+          value={state.perPage}
+          onChange={handlePerPageChange}
+          options={[10, 50, 100]}
+        />
 				{/* Відображення результатів пошуку у вигляді таблиці */}
-				{results && (
+				{state.results && (
 					<div>
 						{/* Виведення заголовка з кількістю знайдених записів */}
 						<h3>
-							Знайдено {totalCount}{' '}
-							{totalCount % 10 === 1 && totalCount % 100 !== 11
+							Знайдено {state.totalCount}{' '}
+							{state.totalCount % 10 === 1 && state.totalCount % 100 !== 11
 								? 'запис'
-								: totalCount % 10 >= 2 &&
-								  totalCount % 10 <= 4 &&
-								  (totalCount % 100 < 10 || totalCount % 100 >= 20)
+								: state.totalCount % 10 >= 2 &&
+								  state.totalCount % 10 <= 4 &&
+								  (state.totalCount % 100 < 10 || state.totalCount >= 20)
 								? 'записи'
 								: 'записів'}
 						</h3>
 						{/* Таблиця з результатами пошуку */}
-						{totalCount > 0 ? (
+						{state.totalCount > 0 ? (
 							<Table className='mt-4' striped bordered hover>
 								<thead>
 									<tr>
@@ -219,13 +222,13 @@ export default function FindPerson({
 										{Object.entries(formFieldsNames).map(([key, label]) => (
 											<th key={key}>{label}</th>
 										))}
-										<th>Дія</th>{' '}
+										<th>Дія</th>
 										{/* Додавання нового заголовка для стовпця з діями */}
 									</tr>
 								</thead>
 								<tbody>
 									{/* Виведення результатів пошуку у вигляді рядків таблиці */}
-									{results.map((person, index) => (
+									{state.results.map((person, index) => (
 										<tr key={index}>
 											{/* Виведення даних згідно назв полів форми */}
 											{Object.keys(formFieldsNames).map(fieldName => (

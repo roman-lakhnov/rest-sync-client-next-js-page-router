@@ -1,16 +1,10 @@
-// pages/index.js
-
-// Імпортуємо компоненти з бібліотек
 import NavBar from '@/components/NavBar'
 import Link from 'next/link'
 import { Button, Col, Container, Row } from 'react-bootstrap'
+import { toast } from 'react-toastify'
 
 // Головна сторінка
 export default function Home({ selectedPerson }) {
-	const handleDownload = () => {
-		window.location.href = '/cert/cert.pem' // посилання на серверний файл
-	}
-
 	return (
 		<div>
 			{/* Відображення верхнього меню навігації */}
@@ -68,8 +62,9 @@ export default function Home({ selectedPerson }) {
 						<Col md='auto'>
 							<Button
 								variant='secondary'
-								href='/api/download'
+								href="/api/download?fileType=cert&fileName=cert.pem"
 								download='cert.pem'
+								onClick={() => toast.info('Завантаження сертифікату')}
 							>
 								Завантажити cert.pem
 							</Button>

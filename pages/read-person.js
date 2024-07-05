@@ -1,10 +1,10 @@
-// Імпортуємо необхідні бібліотеки та компоненти
 import FormComponent from '@/components/FormComponent'
 import NavBar from '@/components/NavBar'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { Button, Container } from 'react-bootstrap'
 import { toast } from 'react-toastify'
+import axios from '@/utils/axiosFrontend'
 
 // Сторінка профіль особи
 const ReadPerson = ({
@@ -35,7 +35,9 @@ const ReadPerson = ({
 	}, [selectedPerson])
 	const toggleDisabled = () => {
 		setIsFieldsDisabled(!isFieldsDisabled)
-		toast.info(`${!isFieldsDisabled? 'Запис заблоковано': 'Запис розблоковано'}`)
+		toast.info(
+			`${!isFieldsDisabled ? 'Запис заблоковано' : 'Запис розблоковано'}`
+		)
 	}
 	// Функція для обробки зміни значення в полі форми
 	const handleChange = e => {
@@ -49,27 +51,24 @@ const ReadPerson = ({
 	const handleSubmit = async e => {
 		e.preventDefault()
 		try {
-			const response = await fetch(`${process.env.API_URL}/person`, {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					attribute: 'unzr',
-					value: selectedPerson.unzr,
-					...formData
-				})
+			const response = await axios.put(`/person`, {
+				attribute: 'unzr',
+				value: selectedPerson.unzr,
+				...formData
 			})
-			const data = await response.json()
-			if (response.ok) {
+
+			const data = response.data
+			if (response.status === 200) {
 				setSelectedPerson(formData)
-				toast.success(data) // Success notification
-				setIsFieldsDisabled(!isFieldsDisabled) // Зміна стану блокування полів форми
+				toast.success(data)
+				setIsFieldsDisabled(!isFieldsDisabled)
 			} else {
-				toast.error(data) // Error notification
+				console.log(response)
+				toast.error(data)
 			}
 		} catch (error) {
-			console.error('Error updating person:', error)
+			console.error(error)
+			toast.error('Внутрішня помилка серверу')
 		}
 	}
 	// Функція для обробки видалення запису про особу
@@ -79,20 +78,20 @@ const ReadPerson = ({
 			value: selectedPerson.unzr
 		})
 		try {
-			const response = await fetch(`${process.env.API_URL}/person?${params}`, {
-				method: 'DELETE',
-				headers: {}
+			const response = await axios.delete(`/person`, {
+				params: params
 			})
-			const data = await response.json()
-			if (response.ok) {
-				toast.success(data) // Success notification
+			const data = response.data
+			if (response.status === 200) {
+				toast.success(data)
 				setSelectedPerson(null)
-				router.push(`/find-person`) // Перенаправлення на сторінку пошуку осіб
+				router.push(`/find-person`)
 			} else {
-				toast.error(data) // Error notification
+				toast.error(data)
 			}
 		} catch (error) {
-			console.error('Error deleting person:', error)
+			console.log(error)
+			toast.error('Внутрішня помилка серверу')
 		}
 	}
 
