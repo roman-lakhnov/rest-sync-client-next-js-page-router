@@ -18,7 +18,12 @@ const nextConfig = {
 		SERVICE_MEMBER_CODE: process.env.SERVICE_MEMBER_CODE,
 		SERVICE_SUBSYSTEM: process.env.SERVICE_SUBSYSTEM,
 		SERVICE_CODE: process.env.SERVICE_CODE,
-		SERVICE_VERSION: process.env.SERVICE_VERSION
+		SERVICE_VERSION: process.env.SERVICE_VERSION,
+		LOG_LEVEL: process.env.LOG_LEVEL,
+		LOG_DIRECTORY: process.env.LOG_DIRECTORY,
+		ERROR_LOG_FILE_NAME: process.env.ERROR_LOG_FILE_NAME,
+		COMBINED_LOG_FILE_NAME: process.env.COMBINED_LOG_FILE_NAME,
+		PURPOSE_ID: process.envPURPOSE_ID
 		// Інші змінні для використання на сервері
 	}
 }
@@ -36,7 +41,12 @@ if (process.env.NODE_ENV !== 'production') {
 		SERVICE_MEMBER_CODE: process.env.SERVICE_MEMBER_CODE,
 		SERVICE_SUBSYSTEM: process.env.SERVICE_SUBSYSTEM,
 		SERVICE_CODE: process.env.SERVICE_CODE,
-		SERVICE_VERSION: process.env.SERVICE_VERSION
+		SERVICE_VERSION: process.env.SERVICE_VERSION,
+		LOG_LEVEL: process.env.LOG_LEVEL,
+		LOG_DIRECTORY: process.env.LOG_DIRECTORY,
+		ERROR_LOG_FILE_NAME: process.env.ERROR_LOG_FILE_NAME,
+		COMBINED_LOG_FILE_NAME: process.env.COMBINED_LOG_FILE_NAME,
+		PURPOSE_ID: process.envPURPOSE_ID
 	})
 }
 // Експортування об'єкту конфігурації Next.js
