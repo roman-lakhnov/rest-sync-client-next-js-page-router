@@ -1,6 +1,6 @@
-import FormComponent from '@/components/FormComponent'
-import NavBar from '@/components/NavBar'
-import axios from '@/utils/axiosFrontend'
+import FormComponent from '../components/FormComponent'
+import NavBar from '../components/NavBar'
+import axios from '../utils/axiosFrontend'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Button, Container } from 'react-bootstrap'
@@ -15,9 +15,9 @@ export default function AddPerson({
 }) {
 	// Ініціалізуємо роутер та стани для форми
 	const router = useRouter()
-	const [formData, setFormData] = useState({ ...blankFormData })
-	const [isFieldsDisabled, setIsFieldsDisabled] = useState(false)
-	const [isDataRequired, setIsDataRequired] = useState({
+	const [formData, setFormData] = useState({ ...blankFormData }) // Стан для зберігання даних форми
+	const [isFieldsDisabled, setIsFieldsDisabled] = useState(false) // Стан для керування блокуванням полів
+	const isDataRequired = {
 		name: true,
 		surname: true,
 		patronym: false,
@@ -26,7 +26,8 @@ export default function AddPerson({
 		unzr: true,
 		passportNumber: true,
 		gender: true
-	})
+	} // Об'єкт для зберігання інформації про обов'язковість полів
+
 	// Функція для обробки зміни значення поля форми
 	const handleChange = e => {
 		const { name, value } = e.target
@@ -35,12 +36,11 @@ export default function AddPerson({
 	// Функція для очищення форми
 	const handleClear = () => {
 		setFormData({ ...blankFormData })
-		toast.info('Форму очищено') //  notification
+		toast.info('Форму очищено') // Відображення повідомлення про очищення форми
 	}
 	// Функція для обробки подання форми
 	const handleSubmit = async e => {
 		e.preventDefault()
-		// console.log(formData)
 		try {
 			const response = await axios.post(`/person`, formData, {
 				headers: {

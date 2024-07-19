@@ -1,13 +1,13 @@
-// utils/middleware.js
-const morgan = require('morgan');
-const logger = require('./logger');
+const morgan = require('morgan'); // Підключення бібліотеки morgan для логування HTTP-запитів
+const logger = require('./logger'); // Підключення модулю logger для налаштування логування
 
-// Create a stream object with a 'write' function that will be used by Morgan
+// Створення об'єкту stream з функцією 'write', яка буде використовуватися Morgan
 const stream = {
-  write: (message) => logger.info(message.trim())
+  write: (message) => logger.info(message.trim()) // Функція, яка передає повідомлення до logger у форматі info
 };
 
-// Create Morgan middleware
+// Створення Morgan middleware з налаштуванням 'combined' і використанням створеного stream
 const morganMiddleware = morgan('combined', { stream });
 
-module.exports = morganMiddleware;
+module.exports = morganMiddleware; // Експорт створеного middleware для логування HTTP-запитів
+

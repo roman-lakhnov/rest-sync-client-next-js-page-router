@@ -1,7 +1,7 @@
 // pages/_app.js
 // Імпортуємо стилі Bootstrap та глобальні стилі нашого додатку.
 import 'bootstrap/dist/css/bootstrap.min.css'
-import '@/styles/globals.css'
+import '../styles/globals.css'
 import { useState } from 'react'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -30,18 +30,20 @@ const MyApp = ({ Component, pageProps }) => {
 		rnokpp: 'РНОКПП',
 		passportNumber: 'Номер паспорту'
 	}
+	// Використовуємо useState для зберігання останньої вибраної особи.
 	const [selectedPerson, setSelectedPerson] = useState(null)
-	// Передаємо пусті дані форми та назви полів як пропси до компонента.
+	// Повертаємо компонент, що обгортає інші компоненти Next.js і передає необхідні пропси.
 	return (
 		<div>
 			<Component
 				{...pageProps}
-				blankFormData={blankFormData}
-				formFieldsNames={formFieldsNames}
-				selectedPerson={selectedPerson}
-				setSelectedPerson={setSelectedPerson}
+				blankFormData={blankFormData} // Передаємо початкові значення форми як пропс
+				formFieldsNames={formFieldsNames} // Передаємо назви полів форми як пропс
+				selectedPerson={selectedPerson} // Передаємо вибрану особу як пропс
+				setSelectedPerson={setSelectedPerson} // Передаємо функцію для зміни вибраної особи як пропс
 			/>
-			<ToastContainer style={{ marginTop: '56px' }} />
+			<ToastContainer style={{ marginTop: '56px' }} />{' '}
+			{/* Компонент для відображення сповіщень */}
 		</div>
 	)
 }

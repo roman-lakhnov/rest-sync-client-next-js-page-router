@@ -1,4 +1,4 @@
-import axios from '@/utils/axiosBackend'
+import axios from './axiosBackend'
 import fs from 'fs'
 import path from 'path'
 

@@ -1,10 +1,10 @@
-import FormComponent from '@/components/FormComponent'
-import NavBar from '@/components/NavBar'
+import FormComponent from '../components/FormComponent'
+import NavBar from '../components/NavBar'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { Button, Container } from 'react-bootstrap'
 import { toast } from 'react-toastify'
-import axios from '@/utils/axiosFrontend'
+import axios from '../utils/axiosFrontend'
 
 // Сторінка профіль особи
 const ReadPerson = ({
@@ -14,10 +14,13 @@ const ReadPerson = ({
 	selectedPerson
 }) => {
 	const router = useRouter()
-	console.log(selectedPerson)
-	const [formData, setFormData] = useState({ ...blankFormData })
-	const [isFieldsDisabled, setIsFieldsDisabled] = useState(true)
-	const [isDataRequired, setIsDataRequired] = useState({
+
+	// Стан компоненту для управління формою та режимом її блокування
+	const [formData, setFormData] = useState({ ...blankFormData }) // Форма з початковими даними
+	const [isFieldsDisabled, setIsFieldsDisabled] = useState(true) // Прапорець, що вказує на стан блокування форми
+
+	// Об'єкт, що визначає обов'язковість полів форми
+	const isDataRequired = {
 		name: true,
 		surname: true,
 		patronym: false,
@@ -26,13 +29,16 @@ const ReadPerson = ({
 		unzr: true,
 		passportNumber: true,
 		gender: true
-	})
+	}
 
+	// Ефект для оновлення даних форми при зміні обраної особи
 	useEffect(() => {
 		if (selectedPerson) {
 			setFormData(selectedPerson)
 		}
 	}, [selectedPerson])
+
+	// Функція для зміни стану блокування форми
 	const toggleDisabled = () => {
 		setIsFieldsDisabled(!isFieldsDisabled)
 		toast.info(
@@ -95,6 +101,7 @@ const ReadPerson = ({
 		}
 	}
 
+	// Відображення компоненту
 	return (
 		<div>
 			{/* Компонент навігаційного бару */}

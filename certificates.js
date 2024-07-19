@@ -2,6 +2,7 @@
 const fs = require('fs') // Для роботи з файловою системою
 const path = require('path') // Для роботи з шляхами файлів
 const selfsigned = require('selfsigned') // Для генерації самопідписаних сертифікатів
+const logger = require('./utils/logger')
 
 // Визначаємо шлях до папки з сертифікатами
 const certsDir = path.resolve(__dirname, 'certs')
@@ -23,7 +24,7 @@ if (!fs.existsSync(keyPath) || !fs.existsSync(certPath)) {
 	fs.writeFileSync(keyPath, pems.private)
 	fs.writeFileSync(certPath, pems.cert)
 
-	console.log('Сертифікати згенеровані і збережені в директорію cert.')
+	logger.info('Сертифікати згенеровані і збережені в директорію cert.')
 } else {
-	console.log('Сертифікати вже існують.')
+	logger.info('Сертифікати вже існують.')
 }

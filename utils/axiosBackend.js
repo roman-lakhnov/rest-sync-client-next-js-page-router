@@ -2,14 +2,12 @@ import axios from 'axios' // Імпорт бібліотеки axios для ви
 import https from 'https' // Імпорт модулю https для налаштування HTTPS
 import fs from 'fs' // Імпорт модулю fs для роботи з файловою системою
 
-let axiosInstance
+let axiosInstance // Змінна для зберігання екземпляру Axios
 
 if (process.env.PROTOCOL === 'https') {
-	// Шлях до вашого сертифікату та ключа
 	const certPath = './certs/cert.pem' // Шлях до сертифікату
 	const keyPath = './certs/key.pem' // Шлях до ключа
 
-	// Зчитування сертифікату та ключа з файлів
 	const cert = fs.readFileSync(certPath) // Зчитування сертифікату
 	const key = fs.readFileSync(keyPath) // Зчитування ключа
 
@@ -18,19 +16,19 @@ if (process.env.PROTOCOL === 'https') {
 		httpsAgent: new https.Agent({
 			cert: cert, // Передача сертифікату
 			key: key, // Передача ключа
-			rejectUnauthorized: false // Вимкнення перевірки сертифіката (можна видалити, якщо потрібно)
+			rejectUnauthorized: false // Вимкнення перевірки сертифіката 
 		}),
-		baseURL: `${process.env.PROTOCOL}://${process.env.SECURITY_SERVER_IP}`,
+		baseURL: `${process.env.PROTOCOL}://${process.env.SECURITY_SERVER_IP}`, // Базовий URL для всіх запитів
 		validateStatus: function (status) {
-			return status < 501
+			return status < 501 // Валідація статусу відповіді: успішність, якщо статус менше 501
 		}
 	})
 } else {
 	// Створення екземпляру Axios без використання сертифікатів
 	axiosInstance = axios.create({
-		baseURL: `${process.env.PROTOCOL}://${process.env.SECURITY_SERVER_IP}`,
+		baseURL: `${process.env.PROTOCOL}://${process.env.SECURITY_SERVER_IP}`, // Базовий URL для всіх запитів
 		validateStatus: function (status) {
-			return status < 501
+			return status < 501 // Валідація статусу відповіді: успішність, якщо статус менше 501
 		}
 	})
 }

@@ -24,7 +24,6 @@ const nextConfig = {
 		ERROR_LOG_FILE_NAME: process.env.ERROR_LOG_FILE_NAME,
 		COMBINED_LOG_FILE_NAME: process.env.COMBINED_LOG_FILE_NAME,
 		PURPOSE_ID: process.envPURPOSE_ID
-		// Інші змінні для використання на сервері
 	}
 }
 // Виведення змінних середовища у консоль, якщо режим не є продакшеном

@@ -1,8 +1,8 @@
-import DropdownComponent from '@/components/DropdownComponent'
-import FormComponent from '@/components/FormComponent'
-import NavBar from '@/components/NavBar'
-import PaginationComponent from '@/components/PaginationComponent'
-import axios from '@/utils/axiosFrontend'
+import DropdownComponent from '../components/DropdownComponent'
+import FormComponent from '../components/FormComponent'
+import NavBar from '../components/NavBar'
+import PaginationComponent from '../components/PaginationComponent'
+import axios from '../utils/axiosFrontend'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState, useCallback } from 'react'
 import { Button, Container, Form, Pagination, Table } from 'react-bootstrap'
@@ -18,24 +18,25 @@ export default function FindPerson({
 	// Ініціалізуємо роутер та стани для форми та результатів пошуку
 	const router = useRouter()
 	const [state, setState] = useState({
-		isFieldsDisabled: false,
-		formData: { ...blankFormData },
-		results: null,
-		currentPage: 1,
-		totalPages: 1,
-		perPage: 50,
-		totalCount: 0,
-		isDataRequired: {
-			name: false,
-			surname: false,
-			patronym: false,
-			dateOfBirth: false,
-			rnokpp: false,
-			unzr: false,
-			passportNumber: false,
-			gender: false
-		}
+		isFieldsDisabled: false, // Стан для керування блокуванням полів
+		formData: { ...blankFormData }, // Стан для зберігання даних форми
+		results: null, // Стан для зберігання результатів пошуку
+		currentPage: 1, // Стан для зберігання поточної сторінки
+		totalPages: 1, // Стан для зберігання загальної кількості сторінок
+		perPage: 50, // Стан для зберігання кількості записів на сторінці
+		totalCount: 0 // Стан для зберігання загальної кількості записів
 	})
+	const isDataRequired = {
+		name: false,
+		surname: false,
+		patronym: false,
+		dateOfBirth: false,
+		rnokpp: false,
+		unzr: false,
+		passportNumber: false,
+		gender: false
+	}// Об'єкт для зберігання інформації про обов'язковість полів
+
 	// Функція для обробки зміни значення поля форми
 	const handleChange = e => {
 		const { name, value } = e.target
@@ -46,7 +47,7 @@ export default function FindPerson({
 	}
 	// Функція для очищення форми
 	const handleClear = () => {
-		toast.info('Форму очищено') // notification
+		toast.info('Форму очищено') // Відображення повідомлення про очищення форми
 		setState(prevState => ({
 			...prevState,
 			formData: { ...blankFormData }
@@ -161,7 +162,7 @@ export default function FindPerson({
 					<FormComponent
 						formData={state.formData}
 						formFieldsNames={formFieldsNames}
-						isDataRequired={state.isDataRequired}
+						isDataRequired={isDataRequired}
 						isFieldsDisabled={state.isFieldsDisabled}
 						handleChange={handleChange}
 						handleSubmit={handleSubmit}
@@ -193,12 +194,12 @@ export default function FindPerson({
 					/>
 				)}
 				{/* Форма для вибору кількості записів на сторінці */}
-			  <DropdownComponent
-          label='Кількість записів на сторінці'
-          value={state.perPage}
-          onChange={handlePerPageChange}
-          options={[10, 50, 100]}
-        />
+				<DropdownComponent
+					label='Кількість записів на сторінці'
+					value={state.perPage}
+					onChange={handlePerPageChange}
+					options={[10, 50, 100]}
+				/>
 				{/* Відображення результатів пошуку у вигляді таблиці */}
 				{state.results && (
 					<div>

@@ -1,17 +1,17 @@
-import axios from '@/utils/axiosBackend.js'
+import axios from '../../utils/axiosBackend.js'
 import saveAsic from '../../utils/saveAsic.js'
-import { getUxpParams } from '@/utils/getUxpParams'
-import { getUxpHeaders } from '@/utils/getUxpHeaders' // Імпорт функції для отримання заголовків
-import morganMiddleware from '@/utils/middleware'
-import logger from '@/utils/logger'
+import { getUxpParams } from '../../utils/getUxpParams'
+import { getUxpHeaders } from '../../utils/getUxpHeaders' // Імпорт функції для отримання заголовків
+import morganMiddleware from '../../utils/middleware'
+import logger from '../../utils/logger'
 
 // Експорт асинхронної функції-обработчика запиту
 export default async function handler(req, res) {
-	// Apply Morgan middleware
+	// Застосування Morgan middleware
 	morganMiddleware(req, res, async err => {
 		if (err) return res.status(500).end('Internal Server Error')
 		const { method, body, query } = req // Деструктуризація властивостей об'єкта запиту
-		const uxpParams = getUxpParams()
+		const uxpParams = getUxpParams() // Отримуємо параметри запиту
 		const serviceUrl = `/restapi/person` // Формування URL сервісу
 		try {
 			logger.info(`Received ${method} request to ${serviceUrl}`)
@@ -24,17 +24,20 @@ export default async function handler(req, res) {
 						? `Request query: ${JSON.stringify(query)}. `
 						: 'No req query. '
 				}`
-			)
+			) // Логування тіла запиту та параметрів
+
 			const config = {
 				url: serviceUrl,
 				method: method,
 				headers: {
-					...getUxpHeaders()
+					...getUxpHeaders() // Встановлення заголовків
 				},
 				data: body,
-				params: uxpParams
+				params: uxpParams // Встановлення параметрів запиту
 			}
-			logger.info(`Next Api added UxpHeaders ${JSON.stringify(config.headers)}`)
+			logger.info(`Next Api added UxpHeaders ${JSON.stringify(config.headers)}`) // Логування встановлених заголовків
+			logger.info(`Next Api added UxpParams ${JSON.stringify(config.params)}`) // Логування встановлених параметрів запиту
+
 			switch (method) {
 				case 'POST':
 					config.method = 'post'
@@ -57,16 +60,18 @@ export default async function handler(req, res) {
 				default:
 					return res.status(405).json('Method Not Allowed') // Відправлення відповіді про неприпустимий метод
 			}
-			let response = await axios.request(config)
+			let response = await axios.request(config) // Виконання запиту через axios
 			logger.info(
 				`Response status: ${response.status}. Response data: ${JSON.stringify(
 					response.data
 				)}`
-			)
-			saveAsic(uxpParams)
-			res.status(response.status).json(response.data)
+			) // Логування статусу відповіді та даних відповіді
+
+			saveAsic(uxpParams) // Виклик функції для збереження ASIC
+
+			res.status(response.status).json(response.data) // Відправлення відповіді з даними
 		} catch (error) {
-			logger.error(`Error: ${JSON.stringify(error)}`)
+			logger.error(`Error: ${JSON.stringify(error)}`) // Логування помилки
 			res.status(500).send('Внутрішня помилка серверу') // Відправлення відповіді про внутрішню помилку сервера
 		}
 	})

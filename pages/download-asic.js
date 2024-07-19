@@ -1,12 +1,13 @@
-import DropdownComponent from '@/components/DropdownComponent'
-import NavBar from '@/components/NavBar'
-import PaginationComponent from '@/components/PaginationComponent'
+import DropdownComponent from '../components/DropdownComponent'
+import NavBar from '../components/NavBar'
+import PaginationComponent from '../components/PaginationComponent'
 import axios from 'axios'
 import { useCallback, useEffect, useState } from 'react'
 import { Button, Container, Form, Pagination, Table } from 'react-bootstrap'
 import { toast } from 'react-toastify'
 
 const DownloadAsic = ({ selectedPerson }) => {
+	// Стан компоненту для управління списком файлів і пагінацією
 	const [state, setState] = useState({
 		files: [],
 		currentPage: 1,
@@ -17,6 +18,7 @@ const DownloadAsic = ({ selectedPerson }) => {
 		error: null
 	})
 
+	// Функція для отримання списку файлів з сервера
 	const fetchFiles = useCallback(async perPage => {
 		setState(prevState => ({ ...prevState, loading: true, error: null }))
 		try {
@@ -46,6 +48,7 @@ const DownloadAsic = ({ selectedPerson }) => {
 		}
 	}, [])
 
+	// Ефект для виклику отримання файлів при зміні параметрів сторінки
 	useEffect(() => {
 		fetchFiles(state.perPage)
 	}, [fetchFiles, state.perPage])
@@ -64,13 +67,16 @@ const DownloadAsic = ({ selectedPerson }) => {
 		}))
 		fetchFiles(newPerPage)
 	}
+	// Функція для отримання відфільтрованого списку файлів для поточної сторінки
 	const getPaginatedFiles = () => {
 		const startIndex = (state.currentPage - 1) * state.perPage
 		const endIndex = startIndex + state.perPage
 		return state.files.slice(startIndex, endIndex)
 	}
+	// Відображення компоненту
 	return (
 		<div>
+			{/* Компонент навігаційного бару */}
 			<NavBar selectedPerson={selectedPerson} />
 			<Container>
 				<div>
@@ -93,22 +99,25 @@ const DownloadAsic = ({ selectedPerson }) => {
 						можливість завантажити останні повідомлення.
 					</p>
 				</div>
+				{/* Відображення інформації про завантаження */}
 				{state.loading && <p>Loading...</p>}
 				{state.error && <p>{state.error}</p>}
+				{/* Відображення пагінації */}
 				{state.totalPages > 0 && (
-										<PaginationComponent
-										currentPage={state.currentPage}
-										totalPages={state.totalPages}
-										onPageChange={handlePageChange}
-									/>
+					<PaginationComponent
+						currentPage={state.currentPage}
+						totalPages={state.totalPages}
+						onPageChange={handlePageChange}
+					/>
 				)}
 				{/* Форма для вибору кількості записів на сторінці */}
-			  <DropdownComponent
-          label='Кількість записів на сторінці'
-          value={state.perPage}
-          onChange={handlePerPageChange}
-          options={[10, 50, 100]}
-        />
+				<DropdownComponent
+					label='Кількість записів на сторінці'
+					value={state.perPage}
+					onChange={handlePerPageChange}
+					options={[10, 50, 100]}
+				/>
+				{/* Відображення списку файлів */}
 				{state.files.length > 0 && (
 					<Table striped bordered hover>
 						<thead className='thead-dark'>
@@ -122,12 +131,14 @@ const DownloadAsic = ({ selectedPerson }) => {
 							</tr>
 						</thead>
 						<tbody>
+							{/* Відображення кожного файлу */}
 							{getPaginatedFiles().map((file, index) => (
 								<tr key={index}>
 									<th scope='row'>{index + 1}</th>
 									<td>{file.name}</td>
 									<td>{new Date(file.createdAt).toLocaleString()}</td>
 									<td>
+										{/* Кнопка для завантаження файлу */}
 										<Button
 											variant='secondary'
 											download={`${file.name}`}
