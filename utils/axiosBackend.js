@@ -7,15 +7,18 @@ let axiosInstance // Змінна для зберігання екземпляр
 if (process.env.PROTOCOL === 'https') {
 	const certPath = './certs/cert.pem' // Шлях до сертифікату
 	const keyPath = './certs/key.pem' // Шлях до ключа
+	const caPath = './certs/service-cert.pem' // Шлях до сертифіката сервісу
 
 	const cert = fs.readFileSync(certPath) // Зчитування сертифікату
 	const key = fs.readFileSync(keyPath) // Зчитування ключа
+	const ca = fs.readFileSync(caPath) // Зчитування сертифіката сервісу
 
 	// Створення екземпляру Axios з передачею сертифіката та ключа
 	axiosInstance = axios.create({
 		httpsAgent: new https.Agent({
 			cert: cert, // Передача сертифікату
 			key: key, // Передача ключа
+			ca: ca, // Передача сертифіката сервісу
 			rejectUnauthorized: false // Вимкнення перевірки сертифіката 
 		}),
 		baseURL: `${process.env.PROTOCOL}://${process.env.SECURITY_SERVER_IP}`, // Базовий URL для всіх запитів
