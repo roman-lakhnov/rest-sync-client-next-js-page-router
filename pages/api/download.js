@@ -17,7 +17,7 @@ export default function handler(req, res) {
 
 		// Визначення шляху до файлу згідно з типом
 		if (fileType === 'asic') {
-			filePath = path.join(process.cwd(), 'asic', fileName) // Шлях до ASIC-контейнеру
+			filePath = path.join(process.env.ASIC_DIRECTORY, fileName) // Шлях до ASIC-контейнеру
 		} else if (fileType === 'cert') {
 			filePath = path.join(process.cwd(), 'certs', 'cert.pem') // Шлях до сертифіката
 		} else {
@@ -31,7 +31,7 @@ export default function handler(req, res) {
 				res.setHeader('Content-Disposition', `attachment; filename=${fileName}`)
 				res.setHeader('Content-Type', 'application/octet-stream')
 				logger.info(`File found: ${filePath}, starting download`)
-				
+
 				// Створення потоку для читання файлу та його потокове передавання у відповідь
 				fs.createReadStream(filePath).pipe(res)
 			} else {

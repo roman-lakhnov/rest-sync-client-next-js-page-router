@@ -28,12 +28,9 @@ const NavBar = ({ selectedPerson }) => {
 								Профіль особи: {selectedPerson.name} {selectedPerson.surname}
 							</Link>
 						)}
-						{process.env.IF_CLIENT_SAVE_ASIC &&
-						(
-							<Link className='nav-link' href={'/download-asic'}>
-								Завантажити ASiC
-							</Link>
-						)}
+						<Link className='nav-link' href={'/download-asic'}>
+							Завантажити ASiC
+						</Link>
 					</Nav>
 				</Navbar.Collapse>
 			</Container>

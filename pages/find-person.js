@@ -35,7 +35,7 @@ export default function FindPerson({
 		unzr: false,
 		passportNumber: false,
 		gender: false
-	}// Об'єкт для зберігання інформації про обов'язковість полів
+	} // Об'єкт для зберігання інформації про обов'язковість полів
 
 	// Функція для обробки зміни значення поля форми
 	const handleChange = e => {
@@ -210,7 +210,9 @@ export default function FindPerson({
 								? 'запис'
 								: state.totalCount % 10 >= 2 &&
 								  state.totalCount % 10 <= 4 &&
-								  (state.totalCount % 100 < 10 || state.totalCount >= 20)
+								  !(
+										state.totalCount % 100 >= 12 && state.totalCount % 100 <= 14
+								  )
 								? 'записи'
 								: 'записів'}
 						</h3>
