@@ -14,7 +14,7 @@ export default async function handler(req, res) {
 
 	const { method, body, query } = req // Деструктуризація властивостей об'єкта запиту
 	const uxpParams = getUxpParams() // Отримуємо параметри запиту
-	const serviceUrl = `/restapi/person` // Формування URL сервісу
+	const serviceUrl = `/restapi` // Формування URL сервісу
 	try {
 		logger.info(`Received ${method} request to ${serviceUrl}`)
 		// Логування отриманого методу та URL запиту
